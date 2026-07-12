@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Renhao | AI Data, AI Product, Project Management",
+  title: "BU Renhao｜AI 数据项目经理",
   description:
-    "Personal portfolio for Renhao, an AI Data, AI Product, and Project Management professional.",
+    "BU Renhao 的个人作品集，聚焦 AI 数据项目管理、自动驾驶数据生产、数据运营体系建设及 AI 工具实践。",
 };
 
 export default function RootLayout({
@@ -13,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="zh-CN">
       <body>{children}</body>
     </html>
   );
