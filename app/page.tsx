@@ -283,10 +283,6 @@ export default function Home() {
               <h1>BU Renhao</h1>
               <p className="hero-subtitle">
                 AI 数据项目经理
-                <br />
-                自动驾驶数据运营
-                <br />
-                数据运营体系建设者
               </p>
               <p className="hero-description">
                 让复杂的 AI 数据生产，
