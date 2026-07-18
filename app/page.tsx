@@ -123,7 +123,7 @@ type ProjectItem = {
   title: string;
   description: string;
   tags: string[];
-  detailType: "github" | "demo" | "onePage";
+  detailType: "github" | "demo" | "onePage" | "article";
   href?: string;
   image?: string;
 };
@@ -140,8 +140,8 @@ const projectItems: ProjectItem[] = [
     title: "AI Data Engine",
     description: "构建 AI Data Engine 方法论，覆盖 Data Foundation、Data Production、Data Operation、Data Platform 等模块，沉淀可复用的 AI 数据生产与运营框架。",
     tags: ["Methodology", "AI Data", "Framework"],
-    detailType: "github",
-    href: "https://github.com/daniel-bu-98/AI-Data-Engine/blob/main/3.Data%20Operation.md",
+    detailType: "article",
+    href: "/ai-data-engine",
   },
   {
     title: "AI Data Operations Skills Library",
@@ -211,6 +211,14 @@ function ProjectAction({ item, onOpen }: { item: ProjectItem; onOpen: (title: st
       <button className="detail-link button-reset" type="button" onClick={() => onOpen(item.title, item.image)}>
         One-Page Research
       </button>
+    );
+  }
+
+  if (item.detailType === "article") {
+    return (
+      <a className="detail-link" href={item.href}>
+        阅读全文
+      </a>
     );
   }
 
