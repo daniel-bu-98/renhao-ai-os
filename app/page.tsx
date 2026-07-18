@@ -233,7 +233,7 @@ export default function Home() {
   const [activeSection, setActiveSection] = useState("about");
   const [modal, setModal] = useState<ModalState | null>(null);
   const [zoom, setZoom] = useState(1);
-  const [portraitMissing, setPortraitMissing] = useState(false);
+  const [heroImageMissing, setHeroImageMissing] = useState(false);
   const [researchImageMissing, setResearchImageMissing] = useState(false);
 
   const sectionIds = useMemo(() => navItems.map((item) => item.id), []);
@@ -309,12 +309,16 @@ export default function Home() {
                 拥有多年地图、自动驾驶及 AI 数据领域经验，专注于数据项目全生命周期管理、规模化数据生产交付、数据运营体系建设及 AI 工具落地。先后参与腾讯地图、理想汽车、Momenta / 极氪及博世相关项目，持续通过流程、平台与 AI 技术提升数据生产效率和交付质量。
               </p>
             </div>
-            <div className="portrait-card" aria-label="个人照片">
-              {!portraitMissing ? (
-                <img src="/profile/bu-renhao.jpg" alt="BU Renhao 个人照片" onError={() => setPortraitMissing(true)} />
+            <div className="portrait-card" aria-label="AI 数据工厂视觉图">
+              {!heroImageMissing ? (
+                <img
+                  src="/renhao-ai-data-hero.png"
+                  alt="AI 数据工厂与数据运营平台视觉图"
+                  onError={() => setHeroImageMissing(true)}
+                />
               ) : (
                 <div>
-                  <span>个人照片待补充</span>
+                  <span>AI 数据视觉图待补充</span>
                 </div>
               )}
             </div>
