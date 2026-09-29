@@ -40,6 +40,127 @@ button {
   font: inherit;
 }
 
+.home-page {
+  width: min(960px, calc(100% - 48px));
+  margin: 0 auto;
+  padding-bottom: 48px;
+  letter-spacing: 0;
+}
+
+.home-header,
+.home-header nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.home-header {
+  min-height: 80px;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.home-header a[aria-current],
+.home-header a:hover {
+  color: var(--blue);
+}
+
+.home-intro {
+  padding: 52px 0 44px;
+}
+
+.home-portrait {
+  display: block;
+  width: 96px;
+  height: 96px;
+  margin-bottom: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.home-intro .eyebrow {
+  letter-spacing: 0;
+  margin-bottom: 12px;
+}
+
+.home-intro h1 {
+  margin: 0;
+  font-size: 48px;
+  line-height: 1.15;
+}
+
+.home-description {
+  max-width: 580px;
+  margin: 20px 0 0;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.home-directions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.home-direction {
+  min-height: 160px;
+  padding: 20px 0;
+  border-top: 2px solid var(--line);
+}
+
+.home-direction h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+}
+
+.home-direction p {
+  margin: 0 0 20px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.home-career {
+  border-color: var(--blue);
+}
+
+.home-career > span {
+  color: var(--blue);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.home-career:hover h2 {
+  color: var(--blue);
+}
+
+.home-page a:focus-visible,
+.side-brand:focus-visible,
+.article-navigation a:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 6px;
+}
+
+@media (max-width: 560px) {
+  .home-page {
+    width: calc(100% - 40px);
+  }
+
+  .home-intro {
+    padding: 36px 0;
+  }
+
+  .home-intro h1 {
+    font-size: 36px;
+  }
+
+  .home-directions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
 .side-nav {
   position: fixed;
   inset: 0 auto 0 0;
@@ -638,9 +759,15 @@ button {
   border-bottom: 1px solid var(--line);
 }
 
-.article-header > a {
-  display: inline-flex;
+.article-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 28px;
   margin-bottom: 42px;
+}
+
+.article-navigation a {
+  display: inline-flex;
   color: var(--blue);
   font-size: 14px;
   font-weight: 820;
@@ -833,7 +960,6 @@ button {
     display: flex;
     align-items: center;
     gap: 22px;
-    overflow-x: auto;
     padding: 16px 20px;
     border-right: 0;
     border-bottom: 1px solid var(--line);
@@ -854,6 +980,8 @@ button {
 
   .side-nav nav {
     display: flex;
+    min-width: 0;
+    overflow-x: auto;
     gap: 4px;
   }
 

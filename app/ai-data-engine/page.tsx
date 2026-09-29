@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, ReactNode, useEffect, useState } from "react";
+import Link from "next/link";
 
 const RAW_URL =
   "https://raw.githubusercontent.com/daniel-bu-98/AI-Data-Engine/main/3.Data%20Operation.md";
@@ -233,7 +234,10 @@ export default function AIDataEnginePage() {
   return (
     <main className="article-page">
       <header className="article-header">
-        <a href="/#projects">返回作品集</a>
+        <nav className="article-navigation" aria-label="页面导航">
+          <Link href="/">返回首页</Link>
+          <Link href="/career#projects">返回职业 · 项目与研究</Link>
+        </nav>
         <p>AI Data Engine</p>
         <h1>Data Operation</h1>
         <span>来自 AI Data Engine 的方法论文档，整理为站内阅读页。</span>

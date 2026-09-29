@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "BU Renhao｜AI 数据项目经理",
+  title: "BU Renhao｜个人空间",
   description:
-    "BU Renhao 的个人作品集，聚焦 AI 数据项目管理、自动驾驶数据生产、数据运营体系建设及 AI 工具实践。",
+    "BU Renhao 的个人空间，从职业经历出发，为学术、生活与兴趣的记录留出空间。",
 };
 
 export default function RootLayout({
