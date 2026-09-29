@@ -56,6 +56,8 @@ button {
 }
 
 .home-header {
+  flex-wrap: wrap;
+  padding: 20px 0;
   min-height: 80px;
   border-bottom: 1px solid var(--line);
   font-size: 14px;
@@ -400,7 +402,7 @@ button {
 .journey-timeline {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 22px;
 }
 
@@ -432,14 +434,16 @@ button {
   content: "";
 }
 
-.journey-timeline time {
+.journey-timeline time,
+.education-list time {
   display: block;
   color: var(--muted);
   font-size: 13px;
   font-weight: 820;
 }
 
-.journey-timeline h3 {
+.journey-timeline h3,
+.education-list h3 {
   margin: 14px 0 10px;
   color: var(--blue);
   font-size: 18px;
@@ -447,7 +451,8 @@ button {
   line-height: 1.28;
 }
 
-.journey-timeline p {
+.journey-timeline p,
+.education-list p {
   margin: 0;
   color: #334155;
   font-size: 14px;
@@ -621,13 +626,33 @@ button {
   border-top: 1px solid var(--line);
 }
 
+.education-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+}
+
+.education-list article {
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.home-page .contact-section {
+  padding: 48px 0 0;
+}
+
+.home-page .contact-section h2 {
+  font-size: 30px;
+}
+
 .contact-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
 }
 
 .contact-grid a {
+  overflow-wrap: anywhere;
   min-height: 104px;
   display: flex;
   align-items: center;
@@ -1022,6 +1047,7 @@ button {
   .competency-grid,
   .card-grid,
   .recognition-grid,
+  .education-list,
   .contact-grid {
     grid-template-columns: 1fr;
   }

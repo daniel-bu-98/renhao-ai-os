@@ -9,6 +9,7 @@ export default function Home() {
         <nav aria-label="主导航">
           <Link href="/" aria-current="page">首页</Link>
           <Link href="/career">职业</Link>
+          <a href="#contact">联系方式</a>
         </nav>
       </header>
 
@@ -32,6 +33,27 @@ export default function Home() {
           </div>
         ))}
       </section>
+      <footer id="contact" className="section-block contact-section">
+        <div className="section-intro">
+          <p className="eyebrow">联系方式</p>
+          <h2>联系我</h2>
+          <p>欢迎围绕 AI 数据、自动驾驶、平台建设及 AI 应用进行交流。</p>
+        </div>
+        <div className="contact-grid">
+          <a href="weixin://">微信号:Joey_98_</a>
+          <a
+            href="https://www.feishu.cn/invitation/page/add_contact/?token=290hf233-b8d8-4275-97e8-d810b4084f0d&unique_id=aEyt6_MsojUxZK0GcxT_og=="
+            target="_blank"
+            rel="noreferrer"
+          >
+            飞书 · 个人主页链接
+          </a>
+          <a href="mailto:burenhao@gmail.com">Email · burenhao@gmail.com</a>
+          <a href="https://github.com/daniel-bu-98" target="_blank" rel="noreferrer">
+            GitHub · daniel-bu-98
+          </a>
+        </div>
+      </footer>
     </main>
   );
 }

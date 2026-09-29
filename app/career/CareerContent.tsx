@@ -6,11 +6,11 @@ import Link from "next/link";
 const navItems = [
   { id: "about", label: "01 个人介绍" },
   { id: "competencies", label: "02 核心能力" },
-  { id: "career", label: "03 十年经历" },
+  { id: "career", label: "03 职业时间线" },
   { id: "experience", label: "04 工作经历" },
-  { id: "projects", label: "05 项目与研究" },
-  { id: "recognition", label: "06 奖项与认证" },
-  { id: "contact", label: "07 联系方式" },
+  { id: "education", label: "05 教育背景" },
+  { id: "projects", label: "06 项目与研究" },
+  { id: "recognition", label: "07 奖项与认证" },
 ];
 
 const competencies = [
@@ -46,12 +46,20 @@ const competencies = [
   },
 ];
 
-const journey = [
+const education = [
   {
     time: "2016–2020",
     name: "中国地质大学（武汉）",
     role: "地球信息科学与技术",
   },
+  {
+    time: "2023–2024",
+    name: "新加坡国立大学",
+    role: "应用地理信息系统",
+  },
+];
+
+const journey = [
   {
     time: "2020–2022",
     name: "腾讯地图",
@@ -61,11 +69,6 @@ const journey = [
     time: "2022–2023",
     name: "理想汽车",
     role: "数据标注项目经理",
-  },
-  {
-    time: "2023–2024",
-    name: "新加坡国立大学",
-    role: "应用地理信息系统",
   },
   {
     time: "2024–2025",
@@ -352,8 +355,8 @@ export default function CareerContent() {
 
         <section id="career" className="section-block">
           <SectionIntro
-            label="十年经历"
-            title="十年学习与职业路径"
+            label="职业时间线"
+            title="职业路径"
             description="从 GIS 到自动驾驶，再到 AI 数据平台，不断拓展数据工程与项目管理能力。"
           />
           <div className="journey-timeline">
@@ -388,6 +391,19 @@ export default function CareerContent() {
                     ))}
                   </ul>
                 </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="education" className="section-block">
+          <SectionIntro label="教育背景" title="教育背景" />
+          <div className="education-list">
+            {education.map((item) => (
+              <article key={item.name}>
+                <time>{item.time}</time>
+                <h3>{item.name}</h3>
+                <p>{item.role}</p>
               </article>
             ))}
           </div>
@@ -441,27 +457,6 @@ export default function CareerContent() {
           </div>
         </section>
 
-        <footer id="contact" className="section-block contact-section">
-          <SectionIntro
-            label="联系方式"
-            title="联系我"
-            description="欢迎围绕 AI 数据、自动驾驶、平台建设及 AI 应用进行交流。"
-          />
-          <div className="contact-grid">
-            <a href="weixin://">微信号:Joey_98_</a>
-            <a
-              href="https://www.feishu.cn/invitation/page/add_contact/?token=290hf233-b8d8-4275-97e8-d810b4084f0d&unique_id=aEyt6_MsojUxZK0GcxT_og=="
-              target="_blank"
-              rel="noreferrer"
-            >
-              飞书 · 个人主页链接
-            </a>
-            <a href="mailto:burenhao@gmail.com">Email · burenhao@gmail.com</a>
-            <a href="https://github.com/daniel-bu-98" target="_blank" rel="noreferrer">
-              GitHub · daniel-bu-98
-            </a>
-          </div>
-        </footer>
       </div>
 
       {modal ? (
