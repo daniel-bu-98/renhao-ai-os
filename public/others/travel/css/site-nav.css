@@ -1,0 +1,4 @@
+.site-project-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; padding: 12px 20px; background: #fff; color: #334155; border-bottom: 1px solid #dce2e5; font: 14px/1.6 sans-serif; }
+.site-project-nav a { color: #2563eb; text-decoration: underline; }
+.site-project-nav span { flex: 1 1 320px; }
+.grid > .card { min-width: 0; }

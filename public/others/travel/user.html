@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>用户端 - 旅游线路预订系统</title>
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/site-nav.css">
+</head>
+<body>
+  <nav class="site-project-nav" aria-label="项目导航"><a href="/others">返回 Others</a><a href="/">首页</a><span>演示项目：非真实预订或支付服务。请勿输入真实个人信息或常用密码。</span></nav>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon">🎒</div>
+        <div>
+          <h1 class="brand-title">旅游线路预订系统</h1>
+          <p class="brand-sub">用户端 · Travel Route Booking</p>
+        </div>
+      </div>
+      <div class="user-meta">
+        <span>用户：<strong id="currentUser">-</strong></span>
+        <span class="clock" id="clock">--</span>
+        <button class="btn btn-outline btn-sm" id="logoutBtn" type="button">退出登录</button>
+      </div>
+    </header>
+
+    <nav class="nav">
+      <button type="button" data-page="routes">线路浏览</button>
+      <button type="button" data-page="orders">我的订单</button>
+      <button type="button" data-page="comments">我的评论</button>
+    </nav>
+
+    <main class="page">
+      <section id="page-routes" class="page-panel">
+        <div class="section-head">
+          <div>
+            <h1>旅游线路</h1>
+            <p>筛选目的地、天数、价格和关键词，查看线路详情或直接下单</p>
+          </div>
+        </div>
+
+        <div class="toolbar filter-round-parent">
+          <div class="field">
+            <label for="filterDest">目的地</label>
+            <select id="filterDest" class="filter-round">
+              <option value="">全部目的地</option>
+              <option>黄山</option>
+              <option>杭州西湖</option>
+              <option>张家界</option>
+              <option>九寨沟</option>
+              <option>丽江古城</option>
+              <option>桂林山水</option>
+              <option>西安兵马俑</option>
+              <option>北京长城</option>
+              <option>拉萨</option>
+              <option>稻城亚丁</option>
+              <option>福建土楼</option>
+              <option>喀纳斯</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="filterDays">行程天数</label>
+            <select id="filterDays" class="filter-round">
+              <option value="">全部天数</option>
+              <option value="1">1-2天</option>
+              <option value="2">3-4天</option>
+              <option value="3">5-7天</option>
+              <option value="4">8天以上</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="filterMin">最低价</label>
+            <input id="filterMin" class="filter-round" type="number" min="0" placeholder="不限">
+          </div>
+          <div class="field">
+            <label for="filterMax">最高价</label>
+            <input id="filterMax" class="filter-round" type="number" min="0" placeholder="不限">
+          </div>
+          <div class="field" style="min-width: 190px;">
+            <label for="filterKeyword">关键词搜索</label>
+            <input id="filterKeyword" class="filter-round" placeholder="线路名称或特色">
+          </div>
+          <div class="spacer"></div>
+          <button class="btn btn-outline" id="resetRoutes" type="button">重置条件</button>
+        </div>
+
+        <div class="routes-grid grid" id="routesGrid"></div>
+      </section>
+
+      <section id="page-orders" class="page-panel hidden">
+        <div class="section-head">
+          <div>
+            <h1>我的订单</h1>
+            <p>查看当前账号下的预订和支付状态</p>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <div class="field">
+            <label for="orderStatus">订单状态</label>
+            <select id="orderStatus" class="filter-round">
+              <option value="">全部状态</option>
+              <option>待支付</option>
+              <option>已支付</option>
+              <option>已完成</option>
+              <option>已取消</option>
+            </select>
+          </div>
+          <div class="field" style="min-width: 240px;">
+            <label for="orderKeyword">订单号 / 线路</label>
+            <input id="orderKeyword" class="filter-round" placeholder="输入关键字">
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data">
+            <thead>
+              <tr>
+                <th>订单号</th>
+                <th>线路</th>
+                <th>班期</th>
+                <th>人数</th>
+                <th>金额</th>
+                <th>状态</th>
+                <th>下单时间</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="ordersBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="page-comments" class="page-panel hidden">
+        <div class="section-head">
+          <div>
+            <h1>我的评论</h1>
+            <p>查看自己发表的评论，或提交新的线路评价</p>
+          </div>
+          <button class="btn btn-primary" data-action="open-comment" type="button">提交评论</button>
+        </div>
+
+        <div class="toolbar">
+          <div class="field" style="min-width: 240px;">
+            <label for="commentKeyword">线路 / 内容</label>
+            <input id="commentKeyword" class="filter-round" placeholder="输入关键字">
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>线路</th>
+                <th>评分</th>
+                <th>评论内容</th>
+                <th>状态</th>
+                <th>时间</th>
+              </tr>
+            </thead>
+            <tbody id="commentsBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      © 2026 旅游线路预订系统 <span>· 用户端</span>
+    </footer>
+  </div>
+
+  <div class="modal-backdrop" id="routeDetailModal">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>线路详情</h3>
+        <button class="modal-close" data-action="close-modal" type="button">关闭</button>
+      </div>
+      <div class="modal-body">
+        <div class="grid" style="grid-template-columns: 1.1fr 1fr; gap: 24px;">
+          <div class="route-cover" id="detailImage" style="min-height:280px;border-radius:8px;"></div>
+          <div>
+            <h2 style="margin:0 0 10px;" id="detailName"></h2>
+            <div class="route-meta" id="detailMeta" style="margin-bottom:16px;"></div>
+            <div class="card" style="padding:16px;margin-bottom:14px;">
+              <div style="font-size:14px;">价格</div>
+              <div class="money" style="font-size:26px;" id="detailPrice"></div>
+              <div class="muted" style="font-size:13px;">余位 <strong id="detailRemaining"></strong></div>
+            </div>
+            <p style="line-height:1.8;color:#4b5f6b;margin:0;" id="detailDescription"></p>
+            <div style="margin-top:16px;">
+              <div style="font-size:14px;font-weight:800;color:var(--navy);margin-bottom:8px;">核心亮点</div>
+              <div id="detailHighlights" class="route-meta"></div>
+            </div>
+            <div style="margin-top:12px;">
+              <div style="font-size:14px;font-weight:800;color:var(--navy);margin-bottom:8px;">费用包含</div>
+              <div id="detailIncludes" class="route-meta"></div>
+            </div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-outline" data-action="close-modal" type="button">关闭</button>
+          <button class="btn btn-primary" data-action="book" data-id="" id="detailBook" type="button">立即预订</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="bookModal">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>确认预订</h3>
+        <button class="modal-close" data-action="close-modal" type="button">关闭</button>
+      </div>
+      <div class="modal-body">
+        <div class="card" style="padding:20px;margin-bottom:18px;">
+          <div style="font-size:18px;font-weight:800;" id="bookRouteName"></div>
+          <div class="muted" style="margin:6px 0 12px;" id="bookRouteMeta"></div>
+          <div class="filter-row">
+            <div class="field">
+              <label>预订人数</label>
+              <div class="stepper">
+                <button type="button" data-action="people-minus">−</button>
+                <span id="peopleCount" style="min-width:46px;text-align:center;font-weight:800;">1</span>
+                <button type="button" data-action="people-plus">+</button>
+              </div>
+            </div>
+            <div class="field">
+              <label>出发班期</label>
+              <select id="bookSchedule" style="min-width: 180px;"></select>
+            </div>
+            <div class="field">
+              <label>单价</label>
+              <div id="bookPrice" class="money" style="font-size:22px;line-height:39px;"></div>
+            </div>
+            <div class="field">
+              <label>合计</label>
+              <div id="bookTotal" class="money" style="font-size:22px;line-height:39px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="padding:20px;">
+          <h3 style="margin:0 0 12px;font-size:16px;color:var(--navy);">选择支付方式</h3>
+          <div class="filter-row">
+            <button class="btn btn-primary" data-action="choose-method" data-method="微信支付" type="button">微信支付</button>
+            <button class="btn btn-outline" data-action="choose-method" data-method="支付宝" type="button">支付宝</button>
+            <button class="btn btn-outline" data-action="choose-method" data-method="银行卡" type="button">银行卡</button>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-outline" data-action="close-modal" type="button">取消</button>
+          <button class="btn btn-success" data-action="submit-booking" type="button">提交订单</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="paymentModal">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>模拟支付</h3>
+        <button class="modal-close" data-action="close-modal" type="button">关闭</button>
+      </div>
+      <div class="modal-body">
+        <div class="card" style="padding:24px;text-align:center;">
+          <div style="font-size:46px;">💳</div>
+          <h2 style="margin:10px 0;">确认支付</h2>
+          <p class="muted">演示环境不会发生真实扣款，点击支付后会生成本地模拟支付记录。</p>
+        </div>
+        <div class="card" style="padding:18px;margin-top:14px;">
+          <div class="filter-row">
+            <div class="field">
+              <label>订单编号</label>
+              <div id="paymentOrderNo" class="mono" style="font-weight:700;">-</div>
+            </div>
+            <div class="field">
+              <label>支付金额</label>
+              <div id="paymentAmount" class="money" style="font-size:22px;">-</div>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="padding:18px;margin-top:14px;">
+          <h3 style="margin:0 0 12px;font-size:16px;color:var(--navy);">支付方式</h3>
+          <div id="paymentMethods" class="filter-row">
+            <button class="btn btn-primary" data-method="微信支付" type="button">微信支付</button>
+            <button class="btn btn-outline" data-method="支付宝" type="button">支付宝</button>
+            <button class="btn btn-outline" data-method="银行卡" type="button">银行卡</button>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-outline" data-action="close-modal" type="button">返回</button>
+          <button class="btn btn-success" data-action="submit-payment" type="button">确认支付</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="commentModal">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>提交评论</h3>
+        <button class="modal-close" data-action="close-modal" type="button">关闭</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="field">
+            <label>评论线路</label>
+            <select id="newCommentRoute">
+              <option value="">请选择线路</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>评分</label>
+            <select id="newCommentRating">
+              <option value="5">5 星</option>
+              <option value="4">4 星</option>
+              <option value="3">3 星</option>
+              <option value="2">2 星</option>
+              <option value="1">1 星</option>
+            </select>
+          </div>
+          <div class="field" style="grid-column: 1 / -1;">
+            <label>评论内容</label>
+            <textarea id="newCommentContent" rows="4" placeholder="写下这次旅行的体验"></textarea>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-outline" data-action="close-modal" type="button">取消</button>
+          <button class="btn btn-success" data-action="submit-comment" type="button">提交评论</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="js/store.js?v=routes-v3"></script>
+  <script src="js/ui.js?v=routes-v3"></script>
+  <script src="js/user-app.js?v=routes-v3"></script>
+</body>
+</html>

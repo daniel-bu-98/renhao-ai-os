@@ -9,6 +9,7 @@ export default function Home() {
         <nav aria-label="主导航">
           <Link href="/" aria-current="page">首页</Link>
           <Link href="/career">职业</Link>
+          <Link href="/others">Others</Link>
           <a href="#contact">联系方式</a>
         </nav>
       </header>

@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>管理端 - 旅游线路预订系统</title>
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/site-nav.css">
+</head>
+<body>
+  <nav class="site-project-nav" aria-label="项目导航"><a href="/others">返回 Others</a><a href="/">首页</a><span>演示管理端：仅操作当前浏览器的演示数据，不是真实管理后台。</span></nav>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon">🛠️</div>
+        <div>
+          <h1 class="brand-title">旅游线路运营管理</h1>
+          <p class="brand-sub">管理端 · Travel Ops Console</p>
+        </div>
+      </div>
+      <div class="user-meta">
+        <span>管理员：<strong id="currentUser">-</strong></span>
+        <span class="clock" id="clock">--</span>
+        <button class="btn btn-outline btn-sm" id="logoutBtn" type="button">退出登录</button>
+      </div>
+    </header>
+
+    <nav class="nav">
+      <button type="button" data-page="dashboard">数据概览</button>
+      <button type="button" data-page="orders">订单处理</button>
+      <button type="button" data-page="payments">支付退款</button>
+      <button type="button" data-page="comments">评论审核</button>
+      <button type="button" data-page="users">用户管理</button>
+    </nav>
+
+    <main class="page">
+      <section id="page-dashboard" class="page-panel">
+        <div class="section-head">
+          <div>
+            <h1>数据概览</h1>
+            <p>订单、成交金额、用户和待审核评论概况</p>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="card stat">
+            <div class="stat-label">上线线路</div>
+            <div class="stat-value" id="statRoutes">-</div>
+          </div>
+          <div class="card stat">
+            <div class="stat-label">订单总数</div>
+            <div class="stat-value" id="statOrders">-</div>
+          </div>
+          <div class="card stat">
+            <div class="stat-label">成交金额</div>
+            <div class="stat-value" id="statRevenue">-</div>
+          </div>
+          <div class="card stat">
+            <div class="stat-label">注册用户</div>
+            <div class="stat-value" id="statUsers">-</div>
+          </div>
+          <div class="card stat">
+            <div class="stat-label">待审核评论</div>
+            <div class="stat-value" id="statPendingComments">-</div>
+          </div>
+        </div>
+
+        <div class="grid" style="grid-template-columns: 1.6fr 1fr;">
+          <div class="card" style="padding: 20px;">
+            <div class="section-head" style="margin-bottom: 14px;">
+              <div>
+                <h1 style="font-size:18px;">最近订单</h1>
+                <p style="font-size:13px;">最新生成的 5 条预订记录</p>
+              </div>
+              <button class="btn btn-outline btn-sm" data-page="orders" type="button">查看全部</button>
+            </div>
+            <div class="table-wrap">
+              <table class="data">
+                <thead>
+                  <tr>
+                    <th>订单号</th>
+                    <th>用户</th>
+                    <th>线路</th>
+                    <th>班期</th>
+                    <th>人数</th>
+                    <th>金额</th>
+                    <th>状态</th>
+                  </tr>
+                </thead>
+                <tbody id="recentOrders"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 20px;">
+            <div class="section-head" style="margin-bottom: 14px;">
+              <div>
+                <h1 style="font-size:18px;">高分线路</h1>
+                <p style="font-size:13px;">按用户评分排序</p>
+              </div>
+            </div>
+            <div class="grid" style="gap:12px;" id="topRoutes"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-orders" class="page-panel hidden">
+        <div class="section-head">
+          <div>
+            <h1>订单处理</h1>
+            <p>查看全部订单，处理支付、取消和完成状态</p>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <div class="field">
+            <label for="orderStatus">订单状态</label>
+            <select id="orderStatus" class="filter-round">
+              <option value="">全部状态</option>
+              <option>待支付</option>
+              <option>已支付</option>
+              <option>已完成</option>
+              <option>已取消</option>
+            </select>
+          </div>
+          <div class="field" style="min-width: 260px;">
+            <label for="orderKeyword">用户 / 订单号 / 线路</label>
+            <input id="orderKeyword" class="filter-round" placeholder="输入关键字">
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data">
+            <thead>
+              <tr>
+                <th>订单号</th>
+                <th>用户</th>
+                <th>线路</th>
+                <th>班期</th>
+                <th>人数</th>
+                <th>金额</th>
+                <th>状态</th>
+                <th>下单时间</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="ordersBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="page-payments" class="page-panel hidden">
+        <div class="section-head">
+          <div>
+            <h1>支付退款</h1>
+            <p>查看支付流水，对成功订单进行退款操作</p>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <div class="field">
+            <label for="payStatus">支付状态</label>
+            <select id="payStatus" class="filter-round">
+              <option value="">全部状态</option>
+              <option>支付成功</option>
+              <option>待支付</option>
+              <option>已退款</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="payMethod">支付方式</label>
+            <select id="payMethod" class="filter-round">
+              <option value="">全部方式</option>
+              <option>微信支付</option>
+              <option>支付宝</option>
+              <option>银行卡</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data">
+            <thead>
+              <tr>
+                <th>支付编号</th>
+                <th>订单号</th>
+                <th>用户</th>
+                <th>支付方式</th>
+                <th>金额</th>
+                <th>状态</th>
+                <th>支付时间</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="paymentsBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="page-comments" class="page-panel hidden">
+        <div class="section-head">
+          <div>
+            <h1>评论审核</h1>
+            <p>审核用户提交的线路评论</p>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <div class="field">
+            <label for="commentStatus">审核状态</label>
+            <select id="commentStatus" class="filter-round">
+              <option value="">全部状态</option>
+              <option>已通过</option>
+              <option>待审核</option>
+              <option>已拒绝</option>
+            </select>
+          </div>
+          <div class="field" style="min-width: 240px;">
+            <label for="commentKeyword">用户 / 线路 / 内容</label>
+            <input id="commentKeyword" class="filter-round" placeholder="输入关键字">
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>用户</th>
+                <th>线路</th>
+                <th>评分</th>
+                <th>评论内容</th>
+                <th>状态</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="commentsBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="page-users" class="page-panel hidden">
+        <div class="section-head">
+          <div>
+            <h1>用户管理</h1>
+            <p>维护注册用户的基本资料</p>
+          </div>
+          <button class="btn btn-primary" data-action="open-user" type="button">添加用户</button>
+        </div>
+
+        <div class="toolbar">
+          <div class="field" style="min-width: 260px;">
+            <label for="userKeyword">用户名 / 手机 / 邮箱</label>
+            <input id="userKeyword" class="filter-round" placeholder="输入关键字">
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>用户名</th>
+                <th>性别 / 年龄</th>
+                <th>手机</th>
+                <th>邮箱</th>
+                <th>状态</th>
+              </tr>
+            </thead>
+            <tbody id="usersBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      © 2026 旅游线路预订系统 <span>· 管理端</span>
+    </footer>
+  </div>
+
+  <div class="modal-backdrop" id="paymentModal">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>模拟支付</h3>
+        <button class="modal-close" data-action="close-modal" type="button">关闭</button>
+      </div>
+      <div class="modal-body">
+        <div class="card" style="padding:24px;text-align:center;">
+          <div style="font-size:46px;">💳</div>
+          <h2 style="margin:10px 0;">确认支付</h2>
+          <p class="muted">管理员可为待支付订单补充模拟支付流水。</p>
+        </div>
+        <div class="card" style="padding:18px;margin-top:14px;">
+          <div class="filter-row">
+            <div class="field">
+              <label>订单编号</label>
+              <div id="paymentOrderNo" class="mono" style="font-weight:700;">-</div>
+            </div>
+            <div class="field">
+              <label>支付金额</label>
+              <div id="paymentAmount" class="money" style="font-size:22px;">-</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-outline" data-action="close-modal" type="button">返回</button>
+          <button class="btn btn-success" data-action="submit-payment" type="button">确认支付</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="userModal">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>添加用户</h3>
+        <button class="modal-close" data-action="close-modal" type="button">关闭</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="field">
+            <label>用户名</label>
+            <input id="newUserName">
+          </div>
+          <div class="field">
+            <label>性别</label>
+            <select id="newUserSex">
+              <option>男</option>
+              <option>女</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>年龄</label>
+            <input id="newUserAge" type="number" min="0">
+          </div>
+          <div class="field">
+            <label>手机</label>
+            <input id="newUserPhone">
+          </div>
+          <div class="field">
+            <label>邮箱</label>
+            <input id="newUserEmail">
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-outline" data-action="close-modal" type="button">取消</button>
+          <button class="btn btn-primary" data-action="submit-user" type="button">保存用户</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="js/store.js?v=routes-v3"></script>
+  <script src="js/ui.js?v=routes-v3"></script>
+  <script src="js/admin-app.js?v=routes-v3"></script>
+</body>
+</html>

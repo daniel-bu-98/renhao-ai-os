@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>入口 - 旅游线路预订系统</title>
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/site-nav.css">
+  <style>
+    .portal-page {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background:
+        linear-gradient(135deg, rgba(22,43,58,0.92), rgba(46,134,193,0.78)),
+        url("assets/images/huangshan.jpg") center / cover;
+    }
+
+    .portal-card {
+      width: min(880px, 100%);
+      padding: 34px;
+      border-radius: 14px;
+      background: white;
+      box-shadow: 0 24px 70px rgba(0,0,0,0.35);
+    }
+
+    .portal-title { margin: 0; font-size: 28px; color: var(--navy); }
+    .portal-sub { margin: 8px 0 24px; color: var(--muted); }
+
+    .portal-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .portal-option {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 22px;
+      background: #f7fafc;
+      text-align: left;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .portal-option:hover { border-color: var(--blue-bright); transform: translateY(-2px); }
+    .portal-option h2 { margin: 0 0 8px; color: var(--navy); font-size: 20px; }
+    .portal-option p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
+    .portal-option .tag {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 6px 11px;
+      border-radius: 999px;
+      background: #e2f0fb;
+      color: #176593;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .login-wrap { margin-top: 22px; display: none; }
+    .login-wrap.show { display: block; }
+    .login-back {
+      margin-bottom: 12px;
+      padding: 0;
+      background: transparent;
+      border: 0;
+      color: var(--muted);
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+
+    @media (max-width: 720px) {
+      .portal-grid, .form-row { grid-template-columns: 1fr; }
+      .portal-card { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="site-project-nav" aria-label="项目导航"><a href="/others">返回 Others</a><a href="/">首页</a><span>演示项目：非真实预订或支付服务。数据仅保存在当前浏览器，请勿输入真实个人信息或常用密码。</span></nav>
+  <main class="portal-page">
+    <div class="portal-card">
+      <div class="brand" style="margin-bottom: 18px;">
+        <div class="brand-icon">🗺️</div>
+        <div>
+          <h1 class="brand-title">旅游线路预订系统</h1>
+          <p class="brand-sub">Travel Route Booking System</p>
+        </div>
+      </div>
+
+      <section id="portalSelect">
+        <h1 class="portal-title">选择登录入口</h1>
+        <p class="portal-sub">用户端面向游客与下单用户，管理端面向运营管理员</p>
+        <div class="portal-grid">
+          <button class="portal-option" type="button" data-portal="user">
+            <h2>🎒 用户端</h2>
+            <p>浏览旅游线路、选择班期、下单支付、查看我的订单、发表评论。</p>
+            <span class="tag">演示账号 demo / 123456</span>
+          </button>
+          <button class="portal-option" type="button" data-portal="admin">
+            <h2>🛠️ 管理端</h2>
+            <p>数据概览、订单处理、支付退款、评论审核、用户管理。</p>
+            <span class="tag">管理员账号 admin / 123456</span>
+          </button>
+        </div>
+      </section>
+
+      <section id="loginForm" class="login-wrap">
+        <button class="login-back" id="backButton" type="button">← 返回入口选择</button>
+        <h1 class="portal-title" id="loginTitle">用户端登录</h1>
+        <p class="portal-sub" id="loginSub">登录后浏览线路、下单和查看我的订单</p>
+
+        <form onsubmit="return doLogin(event)">
+          <div class="form-row">
+            <div class="field">
+              <label for="loginUsername">账号</label>
+              <input id="loginUsername" autocomplete="username">
+            </div>
+            <div class="field">
+              <label for="loginPassword">密码</label>
+              <input id="loginPassword" type="password" autocomplete="current-password">
+            </div>
+          </div>
+          <button class="btn btn-primary" type="submit" style="width:100%;">登录</button>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <script src="js/store.js?v=routes-v3"></script>
+  <script>
+    var selectedPortal = 'user';
+
+    document.querySelector('.portal-option[data-portal="user"]').addEventListener('click', function () {
+      selectedPortal = 'user';
+      document.getElementById('loginUsername').value = 'demo';
+      document.getElementById('loginPassword').value = '123456';
+      showLogin('用户端登录', '浏览线路、下单支付、查看我的订单和评论');
+    });
+
+    document.querySelector('.portal-option[data-portal="admin"]').addEventListener('click', function () {
+      selectedPortal = 'admin';
+      document.getElementById('loginUsername').value = 'admin';
+      document.getElementById('loginPassword').value = '123456';
+      showLogin('管理端登录', '数据概览、订单处理、支付退款、评论审核和用户管理');
+    });
+
+    document.getElementById('backButton').addEventListener('click', function () {
+      document.getElementById('loginForm').classList.remove('show');
+      document.getElementById('portalSelect').style.display = 'block';
+    });
+
+    function showLogin(title, sub) {
+      document.getElementById('portalSelect').style.display = 'none';
+      document.getElementById('loginTitle').textContent = title;
+      document.getElementById('loginSub').textContent = sub;
+      document.getElementById('loginForm').classList.add('show');
+    }
+
+    function doLogin(event) {
+      event.preventDefault();
+      var username = document.getElementById('loginUsername').value.trim();
+      var password = document.getElementById('loginPassword').value.trim();
+      var session = window.TravelAuth.login(username, password);
+      if (!session) {
+        alert('账号或密码错误，请重新输入！');
+        return false;
+      }
+      if (selectedPortal === 'admin' && session.portal !== 'admin') {
+        alert('该账号不是管理员，不能进入管理端');
+        window.TravelAuth.logout();
+        return false;
+      }
+      if (selectedPortal === 'user' && !['user', 'guest'].includes(session.role)) {
+        alert('该账号不是用户端账号');
+        window.TravelAuth.logout();
+        return false;
+      }
+      window.location.href = selectedPortal === 'admin' ? 'admin.html' : 'user.html';
+      return false;
+    }
+  </script>
+</body>
+</html>
